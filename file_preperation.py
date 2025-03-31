@@ -10,4 +10,15 @@ def remove_rows():
 
     df.to_csv('Cleaned Weather/OK08Updated.csv', index=False, na_rep='NA')
 
-remove_rows()
+def temp_to_faren():
+    df = pd.read_csv("WBGT_Cleaned.csv")
+    df[['Tavg', 'Tmax']] = df[['Tavg', 'Tmax']].map(cel_to_far).map(round, ndigits=1)
+    df.to_csv('WBGT_Cleaned1.csv', index=False)
+
+def cel_to_far(x):
+    return (1.8 * x) + 32
+
+
+
+#temp_to_faren()
+#remove_rows()
