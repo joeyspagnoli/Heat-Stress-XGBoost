@@ -9,6 +9,7 @@ import shap
 import matplotlib
 import matplotlib.pyplot as plt
 import mlflow
+from mlflow.models import Model
 
 matplotlib.use('TkAgg')
 
@@ -82,10 +83,28 @@ def train_model():
 
     return best_model
 
-model = train_model()
+# model = train_model()
+#
+# plot_importance(model)
+# plt.show()
 
-plot_importance(model)
-plt.show()
+
+mlflow.set_tracking_uri('http://localhost:5000')
+
+logged_model = 'mlflow-artifacts:/0/375f89b7c2b444e0b64e96195ecf3374/artifacts/model'
+
+loaded_model = mlflow.pyfunc.load_model(logged_model)
+
+input_data = {'Tavg': [1050.0], 'Tmax': [1100.0]}
+
+input_df = pd.DataFrame(input_data)
+
+prediction = loaded_model.predict(input_df)
+
+print("Prediction (0: no heat stroke, 1: heat stroke):", prediction)
+
+
+
 
 
 
